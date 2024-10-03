@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Get the budget data from the hidden div
+    var budgetDataElement = document.getElementById('budgetData');
+    var budgetData = {
+        needs: parseFloat(budgetDataElement.dataset.needs),
+        wants: parseFloat(budgetDataElement.dataset.wants),
+        savings: parseFloat(budgetDataElement.dataset.savings),
+        actual_needs: parseFloat(budgetDataElement.dataset.actualNeeds),
+        actual_wants: parseFloat(budgetDataElement.dataset.actualWants),
+        actual_savings: parseFloat(budgetDataElement.dataset.actualSavings)
+    };
+
     // Pie Chart
     var ctxPie = document.getElementById('budgetPieChart').getContext('2d');
     var budgetPieChart = new Chart(ctxPie, {
@@ -12,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             title: {
                 display: true,
                 text: 'Budget Allocation'
@@ -37,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 y: {
                     beginAtZero: true

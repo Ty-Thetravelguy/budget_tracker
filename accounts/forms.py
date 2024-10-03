@@ -1,5 +1,5 @@
 from django import forms
-from .models import Budget, Transaction
+from .models import Budget, Transaction, Account
 
 class BudgetForm(forms.ModelForm):
     class Meta:
@@ -19,9 +19,22 @@ class BudgetForm(forms.ModelForm):
         return cleaned_data
 
 class TransactionForm(forms.ModelForm):
+    account = forms.ModelChoiceField(queryset=Account.objects.none())
+
     class Meta:
         model = Transaction
-        fields = ['amount', 'description', 'date', 'transaction_type', 'category']
+        fields = ['account', 'amount', 'description', 'date', 'transaction_type', 'category']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(TransactionForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['account'].queryset = Account.objects.filter(user=user)
+
+class AccountForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['name']

@@ -88,16 +88,8 @@ class Transaction(models.Model):
         ('SAVINGS', 'Savings'),
     ]
 
-    account = models.ForeignKey(
-        Account, 
-        on_delete=models.CASCADE, 
-        related_name='transactions',
-        null=True,  # Allow null temporarily
-        blank=True  # Allow blank temporarily
-    )
-
     budget = models.ForeignKey(Budget, on_delete=models.CASCADE, related_name='transactions')
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='transactions')
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='transactions', null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.CharField(max_length=255)
     date = models.DateField()

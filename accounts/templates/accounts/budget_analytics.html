@@ -10,46 +10,64 @@
 <div class="row">
     <div class="col-md-6">
         <h3>50/30/20 Budget Breakdown</h3>
-        <canvas id="budgetPieChart"></canvas>
+        <div class="chart-container">
+            <canvas id="budgetPieChart"></canvas>
+        </div>
     </div>
     <div class="col-md-6">
         <h3>Budget vs. Actual Spending</h3>
-        <canvas id="comparisonBarChart"></canvas>
+        <div class="chart-container">
+            <canvas id="comparisonBarChart"></canvas>
+        </div>
     </div>
 </div>
 
-<div class="mt-4">
-    <h3>Detailed Comparison</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Category</th>
-                <th>Budgeted</th>
-                <th>Actual</th>
-                <th>Difference</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Needs</td>
-                <td>${{ breakdown.needs|floatformat:2 }}</td>
-                <td>${{ actual_spending.needs|floatformat:2 }}</td>
-                <td>${{ breakdown.needs|subtract:actual_spending.needs|floatformat:2 }}</td>
-            </tr>
-            <tr>
-                <td>Wants</td>
-                <td>${{ breakdown.wants|floatformat:2 }}</td>
-                <td>${{ actual_spending.wants|floatformat:2 }}</td>
-                <td>${{ breakdown.wants|subtract:actual_spending.wants|floatformat:2 }}</td>
-            </tr>
-            <tr>
-                <td>Savings</td>
-                <td>${{ breakdown.savings|floatformat:2 }}</td>
-                <td>${{ actual_spending.savings|floatformat:2 }}</td>
-                <td>${{ breakdown.savings|subtract:actual_spending.savings|floatformat:2 }}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h3>Detailed Comparison</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Budgeted</th>
+                    <th>Actual</th>
+                    <th>Difference</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Needs</td>
+                    <td>${{ breakdown.needs|floatformat:2 }}</td>
+                    <td>${{ actual_spending.needs|floatformat:2 }}</td>
+                    <td>${{ breakdown.needs|subtract:actual_spending.needs|floatformat:2 }}</td>
+                </tr>
+                <tr>
+                    <td>Wants</td>
+                    <td>${{ breakdown.wants|floatformat:2 }}</td>
+                    <td>${{ actual_spending.wants|floatformat:2 }}</td>
+                    <td>${{ breakdown.wants|subtract:actual_spending.wants|floatformat:2 }}</td>
+                </tr>
+                <tr>
+                    <td>Savings</td>
+                    <td>${{ breakdown.savings|floatformat:2 }}</td>
+                    <td>${{ actual_spending.savings|floatformat:2 }}</td>
+                    <td>${{ breakdown.savings|subtract:actual_spending.savings|floatformat:2 }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <h3>Your Accounts</h3>
+        <div class="list-group">
+            {% for account in accounts %}
+            <a href="#" class="list-group-item list-group-item-action">
+                {{ account.name }} - Balance: ${{ account.get_balance }}
+            </a>
+            {% empty %}
+            <p>You haven't created any accounts yet.</p>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 
 <a href="{% url 'accounts:budget_detail' budget.id %}" class="btn btn-secondary mt-3">Back to Budget Details</a>
