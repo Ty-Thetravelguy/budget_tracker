@@ -13,7 +13,7 @@
         <div class="list-group">
             {% for budget in budgets %}
             <a href="{% url 'accounts:budget_detail' budget.id %}" class="list-group-item list-group-item-action">
-                {{ budget.name }} - ${{ budget.amount }}
+                {{ budget.name }} - £{{ budget.amount }}
             </a>
             {% empty %}
             <p>You haven't created any budgets yet.</p>
@@ -26,7 +26,7 @@
         <ul class="list-group">
             {% for transaction in recent_transactions %}
             <li class="list-group-item">
-                {{ transaction.description }} - ${{ transaction.amount }} ({{ transaction.date }})
+                {{ transaction.description }} - £{{ transaction.amount }} ({{ transaction.date }})
             </li>
             {% empty %}
             <p>No recent transactions.</p>
@@ -38,9 +38,9 @@
 <div class="row mt-4">
     <div class="col-md-6">
         <h2>Financial Overview</h2>
-        <p>Total Budgeted: ${{ total_budgeted }}</p>
-        <p>Total Spent: ${{ total_spent }}</p>
-        <p>Remaining: ${{ remaining }}</p>
+        <p>Total Budgeted: £{{ total_budgeted }}</p>
+        <p>Total Spent: £{{ total_spent }}</p>
+        <p>Remaining: £{{ remaining }}</p>
     </div>
     <div class="col-md-6">
         <h2>Account Management</h2>

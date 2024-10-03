@@ -35,6 +35,32 @@ class TransactionForm(forms.ModelForm):
             self.fields['account'].queryset = Account.objects.filter(user=user)
 
 class AccountForm(forms.ModelForm):
+    is_credit_card = forms.BooleanField(required=False, label="This is a credit card")
+    linked_account = forms.ModelChoiceField(queryset=None, required=False, label="Link to account")
+
     class Meta:
         model = Account
-        fields = ['name']
+        fields = ['name', 'is_credit_card', 'linked_account']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['linked_account'].queryset = Account.objects.filter(user=user, is_credit_card=False)
+        
+        # Exclude the current account from the linked_account options when editing
+        if self.instance.pk:
+            self.fields['linked_account'].queryset = self.fields['linked_account'].queryset.exclude(pk=self.instance.pk)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        is_credit_card = cleaned_data.get('is_credit_card')
+        linked_account = cleaned_data.get('linked_account')
+
+        if is_credit_card and not linked_account:
+            raise forms.ValidationError("A linked account is required for credit cards.")
+        
+        if not is_credit_card:
+            cleaned_data['linked_account'] = None
+
+        return cleaned_data

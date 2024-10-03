@@ -48,16 +48,44 @@ def account_list(request):
 @login_required
 def account_create(request):
     if request.method == 'POST':
-        form = AccountForm(request.POST)
+        form = AccountForm(request.POST, user=request.user)
         if form.is_valid():
             account = form.save(commit=False)
             account.user = request.user
             account.save()
             messages.success(request, 'Account created successfully!')
-            return redirect('accounts:dashboard')
+            return redirect('accounts:account_list')
     else:
-        form = AccountForm()
-    return render(request, 'accounts/account_create.html', {'form': form})
+        form = AccountForm(user=request.user)
+    return render(request, 'accounts/account_form.html', {'form': form, 'action': 'Create'})
+
+@login_required
+def account_edit(request, account_id):
+    account = get_object_or_404(Account, id=account_id, user=request.user)
+    if request.method == 'POST':
+        form = AccountForm(request.POST, instance=account, user=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Account updated successfully!')
+            return redirect('accounts:account_list')
+    else:
+        form = AccountForm(instance=account, user=request.user)
+    return render(request, 'accounts/account_form.html', {'form': form, 'action': 'Edit'})
+
+@login_required
+def account_delete(request, account_id):
+    account = get_object_or_404(Account, id=account_id, user=request.user)
+    if request.method == 'POST':
+        account.delete()
+        messages.success(request, 'Account deleted successfully!')
+        return redirect('accounts:account_list')
+    return render(request, 'accounts/account_delete.html', {'account': account})
+
+# Update the account_list view to pass accounts to the template
+@login_required
+def account_list(request):
+    accounts = Account.objects.filter(user=request.user)
+    return render(request, 'accounts/account_list.html', {'accounts': accounts})
 
 @login_required
 def create_budget(request):

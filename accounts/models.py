@@ -21,6 +21,8 @@ class User(AbstractUser):
 class Account(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
+    is_credit_card = models.BooleanField(default=False)
+    linked_account = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='credit_cards')
     
     def __str__(self):
         return self.name
