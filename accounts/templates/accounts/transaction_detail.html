@@ -4,7 +4,7 @@
 
 {% block content %}
 <h2>Transaction Details</h2>
-<p>Amount: ${{ transaction.amount }}</p>
+<p>Amount: £{{ transaction.amount }}</p>
 <p>Description: {{ transaction.description }}</p>
 <p>Date: {{ transaction.date }}</p>
 <p>Type: {{ transaction.get_transaction_type_display }}</p>

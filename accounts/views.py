@@ -142,6 +142,7 @@ def delete_transaction(request, transaction_id):
         transaction.delete()
         messages.success(request, 'Transaction deleted successfully!')
         return redirect('accounts:budget_detail', budget_id=budget_id)
+    return render(request, 'accounts/delete_transaction.html', {'transaction': transaction})
 
 @login_required
 def budget_analytics(request, budget_id):

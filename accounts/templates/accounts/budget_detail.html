@@ -16,7 +16,7 @@
     {% for transaction in budget.transactions.all %}
         <li class="list-group-item">
             <a href="{% url 'accounts:transaction_detail' transaction.id %}">
-                {{ transaction.description }} - ${{ transaction.amount }} ({{ transaction.date }})
+                {{ transaction.description }} - £{{ transaction.amount }} ({{ transaction.date }})
             </a>
         </li>
     {% endfor %}

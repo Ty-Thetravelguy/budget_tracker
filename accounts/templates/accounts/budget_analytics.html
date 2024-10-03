@@ -37,21 +37,21 @@
             <tbody>
                 <tr>
                     <td>Needs</td>
-                    <td>${{ breakdown.needs|floatformat:2 }}</td>
-                    <td>${{ actual_spending.needs|floatformat:2 }}</td>
-                    <td>${{ breakdown.needs|subtract:actual_spending.needs|floatformat:2 }}</td>
+                    <td>£{{ breakdown.needs|floatformat:2 }}</td>
+                    <td>£{{ actual_spending.needs|floatformat:2 }}</td>
+                    <td>£{{ breakdown.needs|subtract:actual_spending.needs|floatformat:2 }}</td>
                 </tr>
                 <tr>
                     <td>Wants</td>
-                    <td>${{ breakdown.wants|floatformat:2 }}</td>
-                    <td>${{ actual_spending.wants|floatformat:2 }}</td>
-                    <td>${{ breakdown.wants|subtract:actual_spending.wants|floatformat:2 }}</td>
+                    <td>£{{ breakdown.wants|floatformat:2 }}</td>
+                    <td>£{{ actual_spending.wants|floatformat:2 }}</td>
+                    <td>£{{ breakdown.wants|subtract:actual_spending.wants|floatformat:2 }}</td>
                 </tr>
                 <tr>
                     <td>Savings</td>
-                    <td>${{ breakdown.savings|floatformat:2 }}</td>
-                    <td>${{ actual_spending.savings|floatformat:2 }}</td>
-                    <td>${{ breakdown.savings|subtract:actual_spending.savings|floatformat:2 }}</td>
+                    <td>£{{ breakdown.savings|floatformat:2 }}</td>
+                    <td>£{{ actual_spending.savings|floatformat:2 }}</td>
+                    <td>£{{ breakdown.savings|subtract:actual_spending.savings|floatformat:2 }}</td>
                 </tr>
             </tbody>
         </table>
@@ -61,7 +61,7 @@
         <div class="list-group">
             {% for account in accounts %}
             <a href="#" class="list-group-item list-group-item-action">
-                {{ account.name }} - Balance: ${{ account.get_balance }}
+                {{ account.name }} - Balance: £{{ account.get_balance }}
             </a>
             {% empty %}
             <p>You haven't created any accounts yet.</p>
