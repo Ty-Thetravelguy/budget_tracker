@@ -1,24 +1,46 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
 
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h1>Welcome to your Dashboard</h1>
-<p>This is where you'll manage your budgets.</p>
-<a href="{% url 'accounts:create_budget' %}" class="btn btn-primary">Create New Budget</a>
+<h1>Welcome to Your Dashboard</h1>
 
-{% if user.budget_set.exists %}
-    <h2>Your Budgets:</h2>
-    <ul class="list-group">
-    {% for budget in user.budget_set.all %}
-        <li class="list-group-item">
-            <a href="{% url 'accounts:budget_detail' budget.id %}">
-                {{ budget.name }} - ${{ budget.amount }} ({{ budget.start_date }} to {{ budget.end_date }})
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h2>Your Budgets</h2>
+        <div class="list-group">
+            {% for budget in budgets %}
+            <a href="{% url 'accounts:budget_detail' budget.id %}" class="list-group-item list-group-item-action">
+                {{ budget.name }} - ${{ budget.amount }}
             </a>
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>You don't have any budgets yet. Create one to get started!</p>
-{% endif %}
+            {% empty %}
+            <p>You haven't created any budgets yet.</p>
+            {% endfor %}
+        </div>
+        <a href="{% url 'accounts:create_budget' %}" class="btn btn-primary mt-3">Create New Budget</a>
+    </div>
+    <div class="col-md-6">
+        <h2>Recent Transactions</h2>
+        <ul class="list-group">
+            {% for transaction in recent_transactions %}
+            <li class="list-group-item">
+                {{ transaction.description }} - ${{ transaction.amount }} ({{ transaction.date }})
+            </li>
+            {% empty %}
+            <p>No recent transactions.</p>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h2>Financial Overview</h2>
+        <p>Total Budgeted: ${{ total_budgeted }}</p>
+        <p>Total Spent: ${{ total_spent }}</p>
+        <p>Remaining: ${{ remaining }}</p>
+    </div>
+</div>
 {% endblock %}

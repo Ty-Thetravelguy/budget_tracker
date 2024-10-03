@@ -2,6 +2,9 @@ from django import template
 
 register = template.Library()
 
-@register.filter
+@register.filter(name='subtract')
 def subtract(value, arg):
-    return value - arg
+    try:
+        return float(value) - float(arg)
+    except (ValueError, TypeError):
+        return value

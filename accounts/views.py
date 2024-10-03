@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import BudgetForm, TransactionForm
 from .models import Budget, Transaction
+from django.utils import timezone
+from django.db.models import Sum
+
 
 def register(request):
     if request.method == 'POST':
@@ -20,7 +24,21 @@ def register(request):
 
 @login_required
 def dashboard(request):
-    return render(request, 'accounts/dashboard.html')
+    budgets = Budget.objects.filter(user=request.user)
+    recent_transactions = Transaction.objects.filter(budget__user=request.user).order_by('-date')[:5]
+    
+    total_budgeted = budgets.aggregate(Sum('amount'))['amount__sum'] or 0
+    total_spent = Transaction.objects.filter(budget__user=request.user, transaction_type='EXPENSE').aggregate(Sum('amount'))['amount__sum'] or 0
+    remaining = total_budgeted - total_spent
+    
+    context = {
+        'budgets': budgets,
+        'recent_transactions': recent_transactions,
+        'total_budgeted': total_budgeted,
+        'total_spent': total_spent,
+        'remaining': remaining,
+    }
+    return render(request, 'accounts/dashboard.html', context)
 
 @login_required
 def create_budget(request):
@@ -30,7 +48,6 @@ def create_budget(request):
             budget = form.save(commit=False)
             budget.user = request.user
             budget.save()
-            messages.success(request, 'Budget created successfully!')
             return redirect('accounts:dashboard')
     else:
         form = BudgetForm()

@@ -1,19 +1,15 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Sum
-
 
 class User(AbstractUser):
     first_name = models.CharField(_("first name"), max_length=150)
     last_name = models.CharField(_("last name"), max_length=150)
     email = models.EmailField(_("email address"), unique=True)
-
-    # Additional fields
     date_of_birth = models.DateField(null=True, blank=True)
     phone_number = models.CharField(max_length=15, blank=True)
-
-    # Make email required
     REQUIRED_FIELDS = ["email", "first_name", "last_name"]
 
     def __str__(self):
@@ -22,6 +18,17 @@ class User(AbstractUser):
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
 
+class Account(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.name
+
+    def get_balance(self):
+        total_in = self.transactions.filter(transaction_type='INCOME').aggregate(Sum('amount'))['amount__sum'] or 0
+        total_out = self.transactions.filter(transaction_type='EXPENSE').aggregate(Sum('amount'))['amount__sum'] or 0
+        return total_in - total_out
 
 class Budget(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -57,7 +64,6 @@ class Budget(models.Model):
             'savings': savings
         }
 
-
 class Category(models.Model):
     CATEGORY_TYPES = [
         ('NE', 'Need'),
@@ -71,7 +77,6 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.name} ({self.get_type_display()})"
 
-
 class Transaction(models.Model):
     TRANSACTION_TYPES = [
         ('EXPENSE', 'Expense'),
@@ -82,8 +87,17 @@ class Transaction(models.Model):
         ('WANTS', 'Wants'),
         ('SAVINGS', 'Savings'),
     ]
-    
+
+    account = models.ForeignKey(
+        Account, 
+        on_delete=models.CASCADE, 
+        related_name='transactions',
+        null=True,  # Allow null temporarily
+        blank=True  # Allow blank temporarily
+    )
+
     budget = models.ForeignKey(Budget, on_delete=models.CASCADE, related_name='transactions')
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='transactions')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.CharField(max_length=255)
     date = models.DateField()
@@ -91,4 +105,4 @@ class Transaction(models.Model):
     category = models.CharField(max_length=7, choices=CATEGORIES, default='NEEDS')
     
     def __str__(self):
-        return f"{self.description} - {self.amount}"
+        return f"{self.description} - £{self.amount}"

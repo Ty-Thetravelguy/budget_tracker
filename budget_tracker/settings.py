@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'accounts.templatetags',
     'accounts', 
     'django_bootstrap5', 
 ]
@@ -127,7 +128,8 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'accounts.User'  # Assuming your custom User model is in the accounts app
+
 
 # Authentication settings
 LOGIN_REDIRECT_URL = 'accounts:dashboard'
