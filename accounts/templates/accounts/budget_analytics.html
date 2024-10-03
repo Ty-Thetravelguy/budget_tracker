@@ -10,24 +10,16 @@
 <div class="row">
     <div class="col-md-6">
         <h3>50/30/20 Budget Breakdown</h3>
-        <ul>
-            <li>Needs (50%): ${{ breakdown.needs|floatformat:2 }}</li>
-            <li>Wants (30%): ${{ breakdown.wants|floatformat:2 }}</li>
-            <li>Savings (20%): ${{ breakdown.savings|floatformat:2 }}</li>
-        </ul>
+        <canvas id="budgetPieChart"></canvas>
     </div>
     <div class="col-md-6">
-        <h3>Actual Spending</h3>
-        <ul>
-            <li>Needs: ${{ actual_spending.needs|floatformat:2 }}</li>
-            <li>Wants: ${{ actual_spending.wants|floatformat:2 }}</li>
-            <li>Savings: ${{ actual_spending.savings|floatformat:2 }}</li>
-        </ul>
+        <h3>Budget vs. Actual Spending</h3>
+        <canvas id="comparisonBarChart"></canvas>
     </div>
 </div>
 
 <div class="mt-4">
-    <h3>Comparison</h3>
+    <h3>Detailed Comparison</h3>
     <table class="table">
         <thead>
             <tr>
@@ -61,4 +53,15 @@
 </div>
 
 <a href="{% url 'accounts:budget_detail' budget.id %}" class="btn btn-secondary mt-3">Back to Budget Details</a>
+
+<div id="budgetData" 
+     data-needs="{{ breakdown.needs }}"
+     data-wants="{{ breakdown.wants }}"
+     data-savings="{{ breakdown.savings }}"
+     data-actual-needs="{{ actual_spending.needs }}"
+     data-actual-wants="{{ actual_spending.wants }}"
+     data-actual-savings="{{ actual_spending.savings }}">
+</div>
+
+<script src="{% static 'js/budget_charts.js' %}"></script>
 {% endblock %}
