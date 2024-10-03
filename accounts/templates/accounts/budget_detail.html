@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ budget.name }} Details{% endblock %}
+
+{% block content %}
+<h2>{{ budget.name }}</h2>
+<p>Amount: ${{ budget.amount }}</p>
+<p>Start Date: {{ budget.start_date }}</p>
+<p>End Date: {{ budget.end_date }}</p>
+
+<h3>Transactions</h3>
+<a href="{% url 'accounts:add_transaction' budget.id %}" class="btn btn-primary">Add Transaction</a>
+
+{% if budget.transactions.exists %}
+    <ul class="list-group mt-3">
+    {% for transaction in budget.transactions.all %}
+        <li class="list-group-item">
+            <a href="{% url 'accounts:transaction_detail' transaction.id %}">
+                {{ transaction.description }} - ${{ transaction.amount }} ({{ transaction.date }})
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No transactions yet.</p>
+{% endif %}
+
+<a href="{% url 'accounts:budget_analytics' budget.id %}" class="btn btn-info mt-3">View Analytics</a>
+<a href="{% url 'accounts:budget_update' budget.id %}" class="btn btn-primary mt-3">Update Budget</a>
+<a href="{% url 'accounts:budget_delete' budget.id %}" class="btn btn-danger mt-3">Delete Budget</a>
+<a href="{% url 'accounts:dashboard' %}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+{% endblock %}

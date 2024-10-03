@@ -1,0 +1,24 @@
+{
+    "python.pythonPath": "C:/Users/Tyron/iCloudDrive/Documents/Budget/budget_tracker/budget_env/Scripts/python",
+    "python.analysis.stubPath": "${workspaceFolder}/budget_env/Lib/site-packages/django-stubs",
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}",
+        "${workspaceFolder}/budget_tracker",
+        "${workspaceFolder}/budget_env/Lib/site-packages"
+    ],
+    "python.autoComplete.extraPaths": [
+        "${workspaceFolder}",
+        "${workspaceFolder}/budget_tracker",
+        "${workspaceFolder}/budget_env/Lib/site-packages"
+    ],
+    "python.linting.pylintArgs": [
+        "--load-plugins=pylint_django",
+        "--django-settings-module=budget_tracker.settings"
+    ],
+    "python.analysis.typeCheckingMode": "off",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.indexing": true,
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.diagnosticMode": "workspace",
+    "python.analysis.useLibraryCodeForTypes": true
+}

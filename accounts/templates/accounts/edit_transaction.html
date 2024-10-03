@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}Edit Transaction{% endblock %}
+
+{% block content %}
+<h2>Edit Transaction</h2>
+<form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% bootstrap_button "Update Transaction" button_type="submit" button_class="btn-primary" %}
+</form>
+<a href="{% url 'accounts:transaction_detail' transaction.id %}" class="btn btn-secondary">Cancel</a>
+{% endblock %}

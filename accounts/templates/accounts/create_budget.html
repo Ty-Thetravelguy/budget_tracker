@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}Create New Budget{% endblock %}
+
+{% block content %}
+<h2>Create New Budget</h2>
+<form method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% bootstrap_button "Create Budget" button_type="submit" button_class="btn-primary" %}
+</form>
+{% endblock %}

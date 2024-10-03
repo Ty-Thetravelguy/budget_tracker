@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Transaction Details{% endblock %}
+
+{% block content %}
+<h2>Transaction Details</h2>
+<p>Amount: ${{ transaction.amount }}</p>
+<p>Description: {{ transaction.description }}</p>
+<p>Date: {{ transaction.date }}</p>
+<p>Type: {{ transaction.get_transaction_type_display }}</p>
+<p>Category: {{ transaction.get_category_display }}</p>
+<a href="{% url 'accounts:edit_transaction' transaction.id %}" class="btn btn-primary">Edit</a>
+<a href="{% url 'accounts:delete_transaction' transaction.id %}" class="btn btn-danger">Delete</a>
+<a href="{% url 'accounts:budget_detail' transaction.budget.id %}" class="btn btn-secondary">Back to Budget</a>
+{% endblock %}

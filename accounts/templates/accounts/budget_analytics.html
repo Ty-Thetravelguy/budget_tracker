@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}{{ budget.name }} Analytics{% endblock %}
+
+{% block content %}
+<h2>{{ budget.name }} Analytics</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>50/30/20 Budget Breakdown</h3>
+        <ul>
+            <li>Needs (50%): ${{ breakdown.needs|floatformat:2 }}</li>
+            <li>Wants (30%): ${{ breakdown.wants|floatformat:2 }}</li>
+            <li>Savings (20%): ${{ breakdown.savings|floatformat:2 }}</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h3>Actual Spending</h3>
+        <ul>
+            <li>Needs: ${{ actual_spending.needs|floatformat:2 }}</li>
+            <li>Wants: ${{ actual_spending.wants|floatformat:2 }}</li>
+            <li>Savings: ${{ actual_spending.savings|floatformat:2 }}</li>
+        </ul>
+    </div>
+</div>
+
+<div class="mt-4">
+    <h3>Comparison</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Budgeted</th>
+                <th>Actual</th>
+                <th>Difference</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Needs</td>
+                <td>${{ breakdown.needs|floatformat:2 }}</td>
+                <td>${{ actual_spending.needs|floatformat:2 }}</td>
+                <td>${{ breakdown.needs|subtract:actual_spending.needs|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td>Wants</td>
+                <td>${{ breakdown.wants|floatformat:2 }}</td>
+                <td>${{ actual_spending.wants|floatformat:2 }}</td>
+                <td>${{ breakdown.wants|subtract:actual_spending.wants|floatformat:2 }}</td>
+            </tr>
+            <tr>
+                <td>Savings</td>
+                <td>${{ breakdown.savings|floatformat:2 }}</td>
+                <td>${{ actual_spending.savings|floatformat:2 }}</td>
+                <td>${{ breakdown.savings|subtract:actual_spending.savings|floatformat:2 }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<a href="{% url 'accounts:budget_detail' budget.id %}" class="btn btn-secondary mt-3">Back to Budget Details</a>
+{% endblock %}
